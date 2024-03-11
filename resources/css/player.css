@@ -1,0 +1,5 @@
+
+.border-right th,
+.border-right td {
+    border-right: 1px solid #fff;
+}
