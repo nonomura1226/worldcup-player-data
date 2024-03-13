@@ -18,7 +18,7 @@ use App\Http\Controllers\PlayersController;
 });
 */
 
-Route::get('/', [PlayersController::class, 'index']);
+Route::redirect('/', '/players');
 
 Route::prefix('players')->group(function () {
     Route::get('/', [PlayersController::class, 'index'])->name('players.index');
