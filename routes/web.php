@@ -18,7 +18,7 @@ use App\Http\Controllers\PlayersController;
 });
 */
 
-Route::get('/list', [PlayersController::class, 'index']);
+Route::get('/', [PlayersController::class, 'index']);
 
 Route::prefix('players')->group(function () {
     Route::get('/', [PlayersController::class, 'index'])->name('players.index');
