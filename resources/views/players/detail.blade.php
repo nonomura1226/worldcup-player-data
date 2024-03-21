@@ -22,12 +22,16 @@
             <th class="text-center">{{ $player->position }}</th>
         </tr>
         <tr>
-            <th class="text-center">所属</th>
-            <th class="text-center">{{ $player->club }}</th>
-        </tr>
-        <tr>
             <th class="text-center">名前</th>
             <th class="text-center">{{ $player->name }}</th>
+        </tr>
+        <tr>
+            <th class="text-center">国</th>
+            <th class="text-center">{{ $player->country->name }}</th>
+        </tr>
+        <tr>
+            <th class="text-center">所属</th>
+            <th class="text-center">{{ $player->club }}</th>
         </tr>
         <tr>
             <th class="text-center">誕生日</th>
@@ -41,7 +45,25 @@
             <th class="text-center">体重</th>
             <th class="text-center">{{ $player->weight }}</th>
         </tr>
+        <tr>
+            <th class="text-center">総得点</th>
+            <th class="text-center">{{ $goalsCount }}</th>
+        </tr>
+        <tr>
+            <th class="text-center">得点履歴</th>
+            @if(!is_null($player->pairings))
+                <th class="text-center">
+                @foreach($player->pairings as $index => $pairing)
+                    ・{{ $pairing->kickoff }}開始 {{$pairing->enemyCountry->name}}戦 {{ $player->goals->first()->goal_time}}: {{ $index + 1 }}点目<br>
+                @endforeach
+                </th>
+            @else
+                <th></th>
+            @endif
+        </tr>
     </table>
-    <a href="{{ route('players.index') }}">戻る</a>
+    <div class="d-flex justify-content-center mt-3">
+        <a href="{{ route('players.index') }}" class="btn btn-primary text-white" style="background-color: black; border: none; width: 80%; font-size: 20px;">戻る</a>
+    </div>
 </body>
 </html>

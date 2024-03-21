@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlayersController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,14 +14,16 @@ use App\Http\Controllers\PlayersController;
 |
 */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});
-*/
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::redirect('/', '/players');
 
 Route::prefix('players')->group(function () {
     Route::get('/', [PlayersController::class, 'index'])->name('players.index');
     Route::get('/{id}', [PlayersController::class, 'showDetail'])->name('players.showDetail');
+    Route::get('/{id}/edit', [PlayersController::class, 'edit'])->name('players.edit');
+    Route::put('/{id}/update', [PlayersController::class, 'update'])->name('players.update');
+    Route::get('/{id}/delete', [PlayersController::class, 'delete'])->name('players.delete');
 });
