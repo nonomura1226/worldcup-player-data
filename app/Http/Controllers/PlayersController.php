@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Players;
+use App\Models\Users;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Validator;
 
@@ -18,11 +19,20 @@ class PlayersController extends Controller
         // 直前URLのセッション情報に一覧画面URLを保存
         Session::put('previous_url', route('players.index'));
 
-        // 選手データの取得、表示
+        // ユーザーIDをセッションから取得
+        $userId = session('user_id');
+
+        // ユーザーIDを使用してユーザーのroleとcountry_idを取得
+        $user = Users::findOrFail($userId);
+        $role = $user->role;
+        $countryId = $user->country_id;
+
+        // 選手データの取得、表示（del_flgが0、かつcountry_idが同じ選手のみ）
         $players = Players::where('del_flg', 0)
+        ->where('country_id', $countryId)
         ->with('country')
         ->paginate(20);
-        return view('players.index', ['players' => $players]);
+        return view('players.index', ['players' => $players, 'role' => $role]);
     }
 
     public function showDetail($id)
@@ -91,7 +101,7 @@ class PlayersController extends Controller
             ->groupBy('id', 'name')
             ->get();
 
-            // 選手のデータとゴール数を詳細ビューに渡して表示
+            // 選手のデータと国名を詳細ビューに渡して表示
             return view('players.edit', [
                 'player' => $player,
                 'countryNames' => $countryNames,

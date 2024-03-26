@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlayersController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,14 @@ use App\Http\Controllers\PlayersController;
 //     return view('welcome');
 // });
 
-Route::redirect('/', '/players');
+Route::redirect('/', '/users/login');
+
+Route::prefix('users')->group(function () {
+    Route::get('/login', [UsersController::class, 'login'])->name('users.login');
+    Route::post('/loginCheck', [UsersController::class, 'loginCheck'])->name('users.loginCheck');
+    Route::get('/setting', [UsersController::class, 'settingForm'])->name('users.setting');
+    Route::post('/setting', [UsersController::class, 'setting'])->name('users.setting');
+});
 
 Route::prefix('players')->group(function () {
     Route::get('/', [PlayersController::class, 'index'])->name('players.index');

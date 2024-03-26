@@ -22,6 +22,9 @@
         </div>
     @endif
     <h1>■選手データ</h1>
+    <div class="my-1 text-end">
+        <button type="button" onclick="window.location.href='{{ route('users.login') }}'">ログアウト</button>
+    </div>
     <table class="table table-striped table-bordered border-white">
         <tr>
             <th class="text-center">No</th>
@@ -34,10 +37,14 @@
             <th class="text-center">身長</th>
             <th class="text-center">体重</th>
             <th></th>
-            <th></th>
-            <th></th>
+            @if($role == 0)
+                {{-- ログインユーザが一般ユーザーの場合は編集ボタンと削除ボタンを表示しない --}}
+            @else
+                <th></th>
+                <th></th>
+            @endif
         </tr>
-    @foreach($players as $player)
+        @foreach($players as $player)
         <tr>
             <th class="text-center">{{ $player->id }}</th>
             <th class="text-center">{{ $player->uniform_num }}</th>
@@ -51,12 +58,16 @@
             <td class="text-center">
                 <button type="button" class="btn btn-info text-white" onclick="window.location.href='{{ route('players.showDetail', ['id' => $player->id]) }}'">詳細</button>
             </td>
-            <td class="text-center">
-                <button type="button" class="btn btn-success text-white" onclick="window.location.href='{{ route('players.edit', ['id' => $player->id]) }}'">編集</button>
-            </td>
-            <td class="text-center">
-                <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteDialog{{ $player->id }}">削除</button>
-            </td>
+            @if($role == 0)
+                {{-- ログインユーザが一般ユーザーの場合は編集ボタンと削除ボタンを表示しない --}}
+            @else
+                <td class="text-center">
+                    <button type="button" class="btn btn-success text-white" onclick="window.location.href='{{ route('players.edit', ['id' => $player->id]) }}'">編集</button>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#deleteDialog{{ $player->id }}">削除</button>
+                </td>
+            @endif
             <div class="modal fade" id="deleteDialog{{ $player->id }}" tabindex="-1" aria-labelledby="deleteDialogLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -86,7 +97,7 @@
                 });
             </script>
         </tr>
-    @endforeach
+        @endforeach
     </table>
     <style>
         .pagination nav div div p {
@@ -102,6 +113,5 @@
     <div class="pagination page-link">
     {{ $players->links() }}
     </div>
-</table>
 </body>
 </html>
